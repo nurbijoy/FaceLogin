@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+python-multipart
+opencv-python
+numpy
+Pillow
+pydantic
+scipy
+scikit-image
+scikit-learn
+requests
+tensorflow>=2.13.0
+keras>=2.13.0

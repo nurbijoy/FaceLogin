@@ -1,0 +1,1 @@
+{"epoch": 16, "total_epochs": 20, "loss": 0.05946653336286545, "accuracy": 0.9722222089767456, "val_loss": 0.012907402589917183, "val_accuracy": 1.0, "precision": 0.9473684430122375, "recall": 1.0, "status": "training"}

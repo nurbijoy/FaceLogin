@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Anti-Spoofing Model</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gradient-to-br from-purple-50 to-indigo-100 min-h-screen p-6">
+    <div class="max-w-6xl mx-auto">
+        <!-- Header -->
+        <div class="bg-white rounded-2xl shadow-xl p-6 mb-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-3">
+                        <i class="fas fa-brain text-purple-600"></i>
+                        CNN Deep Learning Training
+                    </h1>
+                    <p class="text-gray-600 mt-2">Train a state-of-the-art CNN model with your real and fake images</p>
+                </div>
+                <div class="flex gap-2">
+                    <button id="viewPerformanceBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
+                        <i class="fas fa-chart-line mr-2"></i>View Performance
+                    </button>
+                    <a href="/" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg transition">
+                        <i class="fas fa-home mr-2"></i>Back to Login
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Current Model Performance -->
+        <div id="currentPerformancePanel" class="hidden bg-white rounded-2xl shadow-xl p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold text-gray-800">
+                    <i class="fas fa-chart-bar text-blue-600 mr-2"></i>Current Model Performance
+                </h2>
+                <button id="closePerformanceBtn" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div id="performanceContent">
+                <p class="text-gray-500 text-center py-8">Loading performance data...</p>
+            </div>
+        </div>
+
+        <!-- Progress Steps -->
+        <div class="bg-white rounded-2xl shadow-xl p-6 mb-6">
+            <div class="flex items-center justify-between">
+                <div class="flex-1 text-center" id="step1">
+                    <div class="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <p class="text-sm font-semibold">Capture Real</p>
+                </div>
+                <div class="flex-1 border-t-2 border-gray-300"></div>
+                <div class="flex-1 text-center" id="step2">
+                    <div class="w-12 h-12 bg-gray-300 text-white rounded-full flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-mask"></i>
+                    </div>
+                    <p class="text-sm font-semibold">Capture Fake</p>
+                </div>
+                <div class="flex-1 border-t-2 border-gray-300"></div>
+                <div class="flex-1 text-center" id="step3">
+                    <div class="w-12 h-12 bg-gray-300 text-white rounded-full flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <p class="text-sm font-semibold">Train Model</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Video Feed -->
+            <div class="bg-white rounded-2xl shadow-xl p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">Camera Feed</h2>
+                <div class="relative">
+                    <video id="video" class="w-full h-96 bg-gray-900 rounded-xl object-cover" autoplay></video>
+                    <canvas id="canvas" class="hidden"></canvas>
+                    
+                    <!-- Overlay -->
+                    <div id="overlay" class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-xl">
+                        <button id="startCamera" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold transition flex items-center gap-2">
+                            <i class="fas fa-camera"></i>
+                            Start Camera
+                        </button>
+                    </div>
+
+                    <!-- Capture Flash -->
+                    <div id="flash" class="hidden absolute inset-0 bg-white rounded-xl"></div>
+                </div>
+
+                <!-- Instructions -->
+                <div id="instructions" class="mt-4 p-4 bg-blue-50 rounded-lg">
+                    <h3 class="font-semibold text-blue-900 mb-2">
+                        <i class="fas fa-info-circle mr-2"></i>Instructions
+                    </h3>
+                    <p class="text-blue-800 text-sm" id="instructionText">
+                        Click "Start Camera" to begin training
+                    </p>
+                </div>
+            </div>
+
+            <!-- Training Panel -->
+            <div class="bg-white rounded-2xl shadow-xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold text-gray-800">
+                        <i class="fas fa-brain text-purple-600 mr-2"></i>CNN Deep Learning Training
+                    </h2>
+                    <button id="settingsBtn" class="bg-purple-100 hover:bg-purple-200 text-purple-700 px-4 py-2 rounded-lg transition flex items-center gap-2">
+                        <i class="fas fa-cog"></i>
+                        Settings
+                    </button>
+                </div>
+
+                <!-- Stats -->
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-green-600 text-sm font-semibold">Real Images</p>
+                                <p class="text-3xl font-bold text-green-700" id="realCount">0</p>
+                            </div>
+                            <i class="fas fa-user text-4xl text-green-300"></i>
+                        </div>
+                        <p class="text-xs text-green-600 mt-2">Minimum: 20 (Recommended: 30-50)</p>
+                    </div>
+
+                    <div class="bg-red-50 p-4 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-red-600 text-sm font-semibold">Fake Images</p>
+                                <p class="text-3xl font-bold text-red-700" id="fakeCount">0</p>
+                            </div>
+                            <i class="fas fa-mask text-4xl text-red-300"></i>
+                        </div>
+                        <p class="text-xs text-red-600 mt-2">Minimum: 20 (Recommended: 30-50)</p>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="space-y-3">
+                    <button id="captureRealBtn" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2" disabled>
+                        <i class="fas fa-camera"></i>
+                        Capture Real Image
+                    </button>
+
+                    <button id="captureFakeBtn" class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-semibold transition disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2" disabled>
+                        <i class="fas fa-camera"></i>
+                        Capture Fake Image
+                    </button>
+
+                    <button id="trainBtn" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold transition disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2" disabled>
+                        <i class="fas fa-cog"></i>
+                        Train Model
+                    </button>
+
+                    <button id="retrainBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2" disabled>
+                        <i class="fas fa-sync-alt"></i>
+                        Retrain with Saved Data
+                    </button>
+
+                    <button id="clearBtn" class="w-full bg-gray-600 hover:bg-gray-700 text-white py-3 rounded-lg font-semibold transition flex items-center justify-center gap-2">
+                        <i class="fas fa-trash"></i>
+                        Clear All Data
+                    </button>
+                </div>
+
+                <!-- Tips -->
+                <div class="mt-6 p-4 bg-yellow-50 rounded-lg">
+                    <h3 class="font-semibold text-yellow-900 mb-2">
+                        <i class="fas fa-lightbulb mr-2"></i>Tips for Best Results
+                    </h3>
+                    <ul class="text-yellow-800 text-sm space-y-1">
+                        <li>• Capture from different angles</li>
+                        <li>• Try different expressions</li>
+                        <li>• Use printed photos for fakes</li>
+                        <li>• Try phone/tablet screens</li>
+                        <li>• Minimum 10 each, 20-30 recommended</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Training Progress -->
+        <div id="trainingPanel" class="hidden bg-white rounded-2xl shadow-xl p-6 mt-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-spinner fa-spin mr-2"></i>Training in Progress
+            </h2>
+            <div class="space-y-4">
+                <div class="bg-gray-200 rounded-full h-4 overflow-hidden">
+                    <div id="progressBar" class="bg-purple-600 h-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <p id="trainingStatus" class="text-gray-700 font-mono text-sm">Preparing training data...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div id="resultsPanel" class="hidden bg-white rounded-2xl shadow-xl p-6 mt-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-check-circle text-green-600 mr-2"></i>Training Complete!
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div class="bg-green-50 p-4 rounded-lg text-center">
+                    <p class="text-green-600 text-sm font-semibold">Accuracy</p>
+                    <p class="text-3xl font-bold text-green-700" id="accuracy">--</p>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg text-center">
+                    <p class="text-blue-600 text-sm font-semibold">Training Time</p>
+                    <p class="text-3xl font-bold text-blue-700" id="trainingTime">--</p>
+                </div>
+                <div class="bg-purple-50 p-4 rounded-lg text-center">
+                    <p class="text-purple-600 text-sm font-semibold">Total Images</p>
+                    <p class="text-3xl font-bold text-purple-700" id="totalImages">--</p>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <a href="/" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold transition text-center">
+                    <i class="fas fa-sign-in-alt mr-2"></i>Go to Login
+                </a>
+                <button id="trainAgainBtn" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-3 rounded-lg font-semibold transition">
+                    <i class="fas fa-redo mr-2"></i>Train Again
+                </button>
+            </div>
+        </div>
+
+        <!-- Gallery -->
+        <div class="bg-white rounded-2xl shadow-xl p-6 mt-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Captured Images</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <h3 class="font-semibold text-green-700 mb-2">Real Images</h3>
+                    <div id="realGallery" class="grid grid-cols-3 gap-2 max-h-64 overflow-y-auto">
+                        <p class="col-span-3 text-gray-400 text-sm text-center py-8">No images yet</p>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-red-700 mb-2">Fake Images</h3>
+                    <div id="fakeGallery" class="grid grid-cols-3 gap-2 max-h-64 overflow-y-auto">
+                        <p class="col-span-3 text-gray-400 text-sm text-center py-8">No images yet</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full transform transition-all">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-2xl font-bold text-gray-800">
+                        <i class="fas fa-cog text-purple-600 mr-2"></i>Training Configuration
+                    </h3>
+                    <button id="closeSettingsBtn" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-sync mr-1"></i>Epochs (Training Iterations)
+                        </label>
+                        <input type="number" id="epochs" value="20" min="5" max="100" 
+                               class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-lg">
+                        <p class="text-xs text-gray-600 mt-1">More epochs = better accuracy but longer training (5-100)</p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-layer-group mr-1"></i>Batch Size
+                        </label>
+                        <input type="number" id="batchSize" value="16" min="4" max="32" step="4"
+                               class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-lg">
+                        <p class="text-xs text-gray-600 mt-1">Smaller = more stable, Larger = faster (4-32)</p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            <i class="fas fa-shield-alt mr-1"></i>Confidence Threshold (%)
+                        </label>
+                        <input type="number" id="confidenceThreshold" value="90" min="70" max="99"
+                               class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-lg">
+                        <p class="text-xs text-gray-600 mt-1">Higher = more secure but may reject real faces (70-99)</p>
+                    </div>
+                </div>
+                
+                <div class="mt-6 flex gap-3">
+                    <button id="resetSettingsBtn" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-lg font-semibold transition">
+                        <i class="fas fa-undo mr-2"></i>Reset to Defaults
+                    </button>
+                    <button id="saveSettingsBtn" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold transition">
+                        <i class="fas fa-check mr-2"></i>Save Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full transform transition-all">
+            <div class="p-6">
+                <div class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full" id="modalIconContainer">
+                    <i id="modalIcon" class="text-3xl"></i>
+                </div>
+                <h3 id="modalTitle" class="text-xl font-bold text-gray-800 text-center mb-2"></h3>
+                <p id="modalMessage" class="text-gray-600 text-center mb-6"></p>
+                <div class="flex gap-3">
+                    <button id="modalCancelBtn" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-3 rounded-lg font-semibold transition">
+                        Cancel
+                    </button>
+                    <button id="modalConfirmBtn" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold transition">
+                        Confirm
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/train.js"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 h-screen flex items-center justify-center p-4 overflow-hidden">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl p-6 max-h-screen overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+            <div class="text-center md:text-left">
+                <div class="inline-block p-4 bg-indigo-100 rounded-full mb-4">
+                    <i class="fas fa-user-lock text-5xl text-indigo-600"></i>
+                </div>
+                <h1 class="text-4xl font-bold text-gray-800 mb-3">Welcome Back</h1>
+                <p class="text-gray-600 text-lg mb-6">Login with face recognition</p>
+                
+                <div class="space-y-4">
+                    <button id="captureBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-semibold transition duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2" disabled>
+                        <i class="fas fa-camera-retro"></i>
+                        Capture & Login
+                    </button>
+
+                    <div id="message" class="hidden p-3 rounded-lg text-center font-medium text-sm"></div>
+
+                    <div class="text-center pt-3 border-t border-gray-200 space-y-2">
+                        <p class="text-gray-600 text-sm">Don't have an account?</p>
+                        <a href="/register" class="text-indigo-600 hover:text-indigo-700 font-semibold block">Register here</a>
+                        <a href="/train" class="text-purple-600 hover:text-purple-700 font-semibold text-sm flex items-center justify-center gap-2">
+                            <i class="fas fa-brain"></i>
+                            Train Anti-Spoofing Model
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative">
+                <video id="video" class="w-full h-96 bg-gray-900 rounded-xl object-cover" autoplay></video>
+                <canvas id="canvas" class="hidden"></canvas>
+                <div id="overlay" class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-xl">
+                    <button id="startCamera" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold transition duration-200 flex items-center gap-2">
+                        <i class="fas fa-camera"></i>
+                        Start Camera
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/liveness.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>
