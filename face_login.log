@@ -2724,3 +2724,6 @@ Confusion Matrix:
 2025-11-16 23:29:37,278 - __main__ - INFO - Message: Live person verified (CNN confidence: 98%)
 2025-11-16 23:29:37,278 - __main__ - INFO - ======================================================================
 2025-11-16 23:29:37,279 - __main__ - INFO - Liveness result: True - Live person verified (CNN confidence: 98%)
+2026-02-06 12:00:29,396 - absl - WARNING - Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
+2026-02-06 12:00:29,402 - cnn_antispoofing - INFO - [OK] CNN model loaded from models/cnn_antispoofing_model.h5
+2026-02-06 12:00:29,402 - __main__ - INFO - [OK] Using CNN-based anti-spoofing (deep learning model)
