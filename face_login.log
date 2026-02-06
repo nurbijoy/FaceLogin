@@ -2727,3 +2727,46 @@ Confusion Matrix:
 2026-02-06 12:00:29,396 - absl - WARNING - Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
 2026-02-06 12:00:29,402 - cnn_antispoofing - INFO - [OK] CNN model loaded from models/cnn_antispoofing_model.h5
 2026-02-06 12:00:29,402 - __main__ - INFO - [OK] Using CNN-based anti-spoofing (deep learning model)
+2026-02-06 12:11:28,029 - __main__ - INFO - ======================================================================
+2026-02-06 12:11:28,030 - __main__ - INFO - LIVENESS CHECK STARTED
+2026-02-06 12:11:28,030 - __main__ - INFO - ======================================================================
+2026-02-06 12:11:28,030 - __main__ - INFO - Image shape: (720, 1280, 3), dtype: uint8
+2026-02-06 12:11:28,037 - __main__ - INFO - Image value range: [19, 218]
+2026-02-06 12:11:28,037 - __main__ - INFO - Using CNN-based anti-spoofing (Deep Learning)
+2026-02-06 12:11:28,037 - __main__ - INFO - CNN Confidence threshold: 90%
+2026-02-06 12:11:29,523 - cnn_antispoofing - INFO - [CNN PREDICT] Real probability: 0.9961
+2026-02-06 12:11:29,524 - cnn_antispoofing - INFO - [CNN PREDICT] Threshold: 0.90
+2026-02-06 12:11:29,524 - cnn_antispoofing - INFO - [CNN PREDICT] Decision: True
+2026-02-06 12:11:29,524 - __main__ - INFO - ======================================================================
+2026-02-06 12:11:29,524 - __main__ - INFO - LIVENESS CHECK RESULT
+2026-02-06 12:11:29,524 - __main__ - INFO - ======================================================================
+2026-02-06 12:11:29,524 - __main__ - INFO - Decision: [OK] REAL FACE
+2026-02-06 12:11:29,524 - __main__ - INFO - CNN Confidence: 99%
+2026-02-06 12:11:29,525 - __main__ - INFO - Pass/Fail: PASSED
+2026-02-06 12:11:29,525 - __main__ - INFO - Message: Live person verified (CNN confidence: 99%)
+2026-02-06 12:11:29,525 - __main__ - INFO - ======================================================================
+2026-02-06 12:11:29,544 - __main__ - INFO - 
+======================================================================
+2026-02-06 12:11:29,544 - __main__ - INFO - LOGIN ATTEMPT
+2026-02-06 12:11:29,545 - __main__ - INFO - ======================================================================
+2026-02-06 12:11:29,545 - __main__ - INFO - Image shape: (720, 1280, 3)
+2026-02-06 12:11:29,545 - __main__ - INFO - Step 1: Checking liveness...
+2026-02-06 12:11:29,545 - __main__ - INFO - ======================================================================
+2026-02-06 12:11:29,546 - __main__ - INFO - LIVENESS CHECK STARTED
+2026-02-06 12:11:29,546 - __main__ - INFO - ======================================================================
+2026-02-06 12:11:29,546 - __main__ - INFO - Image shape: (720, 1280, 3), dtype: uint8
+2026-02-06 12:11:29,547 - __main__ - INFO - Image value range: [19, 218]
+2026-02-06 12:11:29,547 - __main__ - INFO - Using CNN-based anti-spoofing (Deep Learning)
+2026-02-06 12:11:29,547 - __main__ - INFO - CNN Confidence threshold: 90%
+2026-02-06 12:11:29,707 - cnn_antispoofing - INFO - [CNN PREDICT] Real probability: 0.9961
+2026-02-06 12:11:29,707 - cnn_antispoofing - INFO - [CNN PREDICT] Threshold: 0.90
+2026-02-06 12:11:29,707 - cnn_antispoofing - INFO - [CNN PREDICT] Decision: True
+2026-02-06 12:11:29,707 - __main__ - INFO - ======================================================================
+2026-02-06 12:11:29,707 - __main__ - INFO - LIVENESS CHECK RESULT
+2026-02-06 12:11:29,708 - __main__ - INFO - ======================================================================
+2026-02-06 12:11:29,708 - __main__ - INFO - Decision: [OK] REAL FACE
+2026-02-06 12:11:29,708 - __main__ - INFO - CNN Confidence: 99%
+2026-02-06 12:11:29,708 - __main__ - INFO - Pass/Fail: PASSED
+2026-02-06 12:11:29,708 - __main__ - INFO - Message: Live person verified (CNN confidence: 99%)
+2026-02-06 12:11:29,708 - __main__ - INFO - ======================================================================
+2026-02-06 12:11:29,708 - __main__ - INFO - Liveness result: True - Live person verified (CNN confidence: 99%)

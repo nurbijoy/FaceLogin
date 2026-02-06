@@ -7,3 +7,4 @@ venv/
 env/
 .kiro
 .vscode
+face_login.log
